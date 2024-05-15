@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     const { username, email, password } = reqBody;
     console.log(reqBody);
 
-    // Check if user exists
+    // Check if user exists in the database
     const user = await User.findOne({ email });
 
     // If user exists return error
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     // Hashed password
     const hashedPassword = await bcryptjs.hash(password, salt);
 
-    // Create new user with requested data
+    // Create new user with requested data based on User model
     const newUser = new User({
       username,
       email,
@@ -40,9 +40,9 @@ export async function POST(request: NextRequest) {
     // Save new user to database
     const savedUser = await newUser.save();
 
-    console.log(savedUser);
+    console.log("savedUser", savedUser);
 
-    // Verify user
+    // Send the email to verify user
     await sendEmail({ email, emailType: "VERIFY", userId: savedUser._id });
 
     // Return response with success message and saved user data

@@ -13,10 +13,10 @@ export async function POST(request: NextRequest) {
     const { username, email, password } = reqBody;
     console.log(reqBody);
 
-    // Find the user
+    // Find the user with email
     const user = await User.findOne({ email });
 
-    // Check if user exists
+    // Check if user exists in the database
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
